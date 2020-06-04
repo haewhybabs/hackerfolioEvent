@@ -16,7 +16,7 @@ passport.use(new jwtStrategy({
         User.findOne({ id: payload.sub })
             .then((existingUser) => {
                 if (existingUser) {
-                    done(null, result);
+                    done(null, existingUser);
                 }
                 //if user does not exist
                 else {
@@ -39,11 +39,11 @@ passport.use(new localStrategy({
     User.findOne({ email })
         .then((existingUser) => {
             if (existingUser) {
-                bcrypt.compare(password, result[0].password, function(err, isMatch) {
+                bcrypt.compare(password, existingUser.password, function(err, isMatch) {
                     if (err) { throw err }
 
                     if (isMatch) {
-                        return done(null, result);
+                        return done(null, existingUser);
                     } else {
                         return done(null, false);
                     }
