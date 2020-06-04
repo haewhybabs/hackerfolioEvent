@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const morgan = require('morgan');
 var expressValidator = require("express-validator");
 const userRouter = require('./routes/users.js');
-const eventRouter = require('./routes/events.js');
+// const eventRouter = require('./routes/events.js');
 var keys = require('./key');
 const app = express();
 //Create Connection
@@ -41,7 +41,7 @@ app.use(
 
 
 app.use('/user', userRouter);
-app.use('/event', profileRouter);
+// app.use('/event', profileRouter);
 
 port = process.env.PORT || 8000;
 app.listen(port, function() {
