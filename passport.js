@@ -13,7 +13,7 @@ passport.use(new jwtStrategy({
 }, async(payload, done) => {
 
     try {
-        User.findOne({ id: payload.sub })
+        User.findOne({ _id: payload.sub })
             .then((existingUser) => {
                 if (existingUser) {
                     done(null, existingUser);
