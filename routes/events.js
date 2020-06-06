@@ -3,13 +3,20 @@ const router = require('express-promise-router')();
 const User = require('../models/user');
 const Event = require('../models/event');
 const passport = require('passport');
-router.post('/create', passport.authenticate('jwt', { session: false }), function(req, res, next) {
 
+function checkRole(roleID) {
+    if (roleID == 2) {
+        return true;
+    } else {
+        return false;
+    }
+}
+router.post('/create', passport.authenticate('jwt', { session: false }), function(req, res, next) {
     var eventName = req.body.eventName;
     var info = req.body.info;
     var type = req.body.type;
     var venue = req.body.venue;
-    var status = 1;
+    var status = 0;
     var userId = req.user._id;
     const today = new Date();
     const date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
@@ -53,13 +60,59 @@ router.post('/create', passport.authenticate('jwt', { session: false }), functio
                 data: newEvent,
             });
         });
-
-
-
-
-
-
     }
+});
+
+router.post('/event-list', passport.authenticate('jwt', { session: false }), function(req, res, next) {
+
+    Event.find({ userId: req.user._id }, function(err, event) {
+        if (err) throw err;
+        res.status(200).json({
+            status: true,
+            data: event,
+        });
+    });
+
 
 });
+// Admin Actions
+router.post('/admin-action', passport.authenticate('jwt', { session: false }), function(req, res, next) {
+    if (checkRole(req.user.roleID)) {
+        var eventId = req.body.eventId;
+        var statusType = req.body.statusType;
+        var update = {
+            status: statusType,
+        }
+        Event.findByIdAndUpdate(eventId, update, function(err, event) {
+            if (err) throw err;
+            res.status(200).json({
+                status: true,
+            });
+
+        });
+    } else {
+        res.status(401).json({
+            status: false,
+            message: 'Unauthorized',
+        });
+    }
+});
+
+router.post('/admin-event-list', passport.authenticate('jwt', { session: false }), function(req, res, next) {
+    if (checkRole(req.user.roleID)) {
+        Event.find().exec(function(err, events) {
+            if (err) throw err;
+            res.status(200).json({
+                status: true,
+                data: events,
+            });
+        });
+    } else {
+        res.status(401).json({
+            status: false,
+            message: 'Unauthorized',
+        });
+    }
+});
+
 module.exports = router;
