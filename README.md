@@ -8,6 +8,7 @@ follow the following commands to get it started:
 * start the server with "nodemon"
 
 ## Documentation
+url: https://hackerfolioevent.herokuapp.com/
 There are 6 endppoints for the API
 * **Registration** : post request to;   "servername"/user/registration , with **fullName,email,password,password_confirmation and phoneNumber for the input post**
 
