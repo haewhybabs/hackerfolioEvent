@@ -13,7 +13,7 @@
         "bcryptjs": "^2.4.3",
         "cookie-parser": "~1.4.4",
         "debug": "4.1.1",
-        "express": "4.17.1",
+        "express": "4.17.3",
         "express-session": "*",
         "express-validator": "5.3.1",
         "moment": "*",
